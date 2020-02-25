@@ -110,7 +110,7 @@ class UserController extends Controller
     {
         return request()->validate([
             'name' => 'string|required',
-            'nim' => 'string|required',
+            'nim' => 'string|required|unique:users',
             'email' => 'string|required|unique:users',
             'semester' => 'integer|required',
             'asal_sekolah' => 'string|required',
