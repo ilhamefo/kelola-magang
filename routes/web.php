@@ -39,12 +39,12 @@ Route::prefix('users')->middleware('verified')->group(function () {
 
 // route ini hanya untuk admin saja
 Route::prefix('admins')->middleware(['is_admin', 'verified'])->group(function () {
-    Route::get('/', 'UserController@index')->name('admins.index');
+    Route::get('/', 'UserController@list')->name('admins.index');
     Route::get('/kegiatan', 'UserController@kegiatan')->name('admins.kegiatan');
     Route::post('/', 'UserController@store')->name('admins.store');
     Route::get('/create', 'UserController@create')->name('admins.create');
     Route::get('/destroyed', 'UserController@destroyed')->name('admins.destroyed');
-    Route::get('/{admin}/edit', 'UserController@edit')->name('admins.edit'); //->middleware('is_self');
+    Route::get('/{admin}/edit', 'UserController@edit')->name('admins.edit')->middleware('check_admin'); //->middleware('is_self');
     Route::put('/{admin}', 'UserController@update')->name('admins.update');
     Route::delete('/{admin}', 'UserController@destroy')->name('admins.destroy');
     Route::get('get-user-data', 'DatatablesController@userData')->name('datatables.user');

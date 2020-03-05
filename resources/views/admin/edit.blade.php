@@ -143,14 +143,28 @@
                                           </div>
                                         </div>
                                       </div>
+                                      <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label for="inputpassword" class="control-label">password</label>
+                                            <input type="password" class="form-control" name="password"  autocomplete="off">
+                                            @error('password')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-6">
+                                            <label for="inputpassword" class="control-label">confirm password</label>
+                                            <input type="password" class="form-control" name="password_confirmation" >
+                                            @error('password')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <div class="col-xs-12">
                                             <br>
-                                            <button class="btn btn-lg btn-success" type="submit"><i
-                                                    class="md md-save"></i> Save</button>
-                                            <button class="btn btn-lg" type="reset"><i
-                                                    class="md md-cancel"></i>
-                                                Reset</button>
+                                            <button class="btn btn-lg btn-success" type="submit"><i class="md md-save"></i> Save</button>
                                         </div>
                                     </div>
                                 </form>

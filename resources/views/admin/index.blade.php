@@ -14,7 +14,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Address</th>
-                                <th>Jenis Kelamin</th>
+                                <th>JK</th>
                                 <th>Asal Sekolah</th>
                                 <th>Jurusan</th>
                                 <th>Semester</th>
@@ -43,7 +43,7 @@
 
     $(document).ready(function () {
         $(function () {
-            $('#user-table').DataTable({
+            var table = $('#user-table').DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
@@ -62,20 +62,21 @@
                     { data: 'is_admin', name: 'is_admin' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'updated_at', name: 'updated_at' },
-                    { data: null, render: function (data, type, row) {
-                        let url = "{{ route('admins.edit', ':id') }}";
-                        url = url.replace(':id', data.id);
-                        let url_hapus = "{{ route('admins.destroy', ':id') }}";
-                        url_hapus = url_hapus.replace(':id', data.id);
+                    { data: 'id', render: function (data, type, row){
+                        let url = "{!! route('admins.edit', ':id') !!}";
+                        url = url.replace(':id', data);
+                        var url_hapus = "{{ route('admins.destroy', ':id') }}";
+                        url_hapus = url_hapus.replace(':id', data);
                         return '<div class="btn-group">' +
-                                            '<a href="'+url+'" class="btn btn-info btn-flat-border btn_edit">Edit</a> ' +
-                                                '<form action="'+url_hapus+'" method="POST" class="target">'+
-                                                    '@csrf'+
-                                                    '@method("DELETE")'+
-                                                    '<button type="submit" class="btn btn-danger btn-flat-border btn_hapus">Hapus</button>'+
-                                                '</form>' +
+                                    '<a href="'+url+'" class="btn btn-info btn-flat-border btn_edit">Edit</a>' +
+                                    '<form action="'+url_hapus+'" method="POST" class="target">'+
+                                        '@csrf'+
+                                        '@method("DELETE")'+
+                                        '<button type="submit" class="btn btn-danger btn-flat-border btn_hapus">Hapus</button>'+
+                                    '</form>' +
                                 '</div>';
-                     } }]
+                    }}]
+
             });
         });
         $("#user-table").on("click", ".btn_hapus", function(e){

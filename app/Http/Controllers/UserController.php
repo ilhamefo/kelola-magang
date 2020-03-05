@@ -7,6 +7,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -18,8 +20,15 @@ class UserController extends Controller
 
     public function index()
     {
+        $users = Auth::user();
+        return view('user.index', compact('users'));
+    }
+
+    public function list()
+    {
         return view('admin.index');
     }
+
     public function userData()
     {
         return DataTables::of(User::query())->make(true);
@@ -45,6 +54,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        // dd(request()->segment(2));
         $user = User::find($id);
         return view('admin.edit', compact('user'));
     }
@@ -52,7 +62,14 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        $data = $this->validasi();
+        $data = $this->validasi_edit();
+        if ($request->input('password') !== null) {
+            $request->validate([
+                'password' => 'sometimes|confirmed|min:6'
+            ]);
+            $data['password'] = Hash::make($request->input('password'));
+        }
+        // dd($request->input('password'));
         if ($request->file('profile_picture') !== null) {
             $path = public_path() . '/img/photos/';
             if ($user->profile_picture !== 'image.jpg'  && $user->profile_picture !== null) {
@@ -64,6 +81,7 @@ class UserController extends Controller
             $file->move($path, $filename);
             $data['profile_picture'] = $filename;
         }
+        // dd($data);
         $user->update($data);
         return redirect()->back()->with('success', 'Sukses Update Data Diri');
     }
@@ -103,7 +121,6 @@ class UserController extends Controller
     public function kegiatan()
     {
         $kegiatan = Kegiatan::all();
-        // dd($kegiatan);
         return view('kegiatan.show_all', compact('kegiatan'));
     }
     public function validasi()
@@ -119,6 +136,25 @@ class UserController extends Controller
             'phone' => 'string|required',
             'jenis_kelamin' => 'string|required',
             'password' => 'string|required|confirmed|min:6',
+            'profile_picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    }
+    public function validasi_edit()
+    {
+        return request()->validate([
+            'nim' => [
+                'required', Rule::unique('users')->ignore(request()->segment(2)),
+            ],
+            'email' => [
+                'required', Rule::unique('users')->ignore(request()->segment(2)),
+            ],
+            'name' => 'string|required',
+            'semester' => 'integer|required',
+            'asal_sekolah' => 'string|required',
+            'jurusan' => 'string|required',
+            'address' => 'string|required',
+            'phone' => 'string|required',
+            'jenis_kelamin' => 'string|required',
             'profile_picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     }

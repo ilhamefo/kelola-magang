@@ -64,11 +64,11 @@
                     { data: 'created_at', name: 'created_at' },
                     { data: 'updated_at', name: 'updated_at' },
                     { data: 'deleted_at', name: 'deleted_at' },
-                    { data: null, render: function (data, type, row) {
+                    { data: 'id', render: function (data, type, row) {
                         let url = "{{ route('admins.restore', ':id') }}";
-                        url = url.replace(':id', data.id);
+                        url = url.replace(':id', data);
                         let url_hapus_permanent = "{{ route('admins.force_delete', ':id') }}";
-                        url_hapus_permanent = url_hapus_permanent.replace(':id', data.id);
+                        url_hapus_permanent = url_hapus_permanent.replace(':id', data);
                         return '<div class="btn-group">' +
                                  '<div class="btn-group">' +
                                                 '<form action="'+url_hapus_permanent+'" method="POST" class="target">'+
